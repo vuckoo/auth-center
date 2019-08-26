@@ -1,0 +1,28 @@
+{
+  "hints": [],
+  "groups": [
+    {
+      "sourceType": "com.zijinph.base.auth.autoconfigure.AuthConfigProperties",
+      "name": "zauth",
+      "type": "com.zijinph.base.auth.autoconfigure.AuthConfigProperties"
+    },
+    {
+      "sourceType": "com.github.zauth.autoconfigure.zauthAutoConfiguration",
+      "name": "zauth",
+      "sourceMethod": "authConfigProperties()",
+      "type": "java.util.Properties"
+    }
+  ],
+  "properties": [
+    {
+      "sourceType": "com.zijinph.base.auth.autoconfigure.AuthConfigProperties",
+      "name": "zauth.client-user-method",
+      "type": "java.lang.String"
+    },
+    {
+      "sourceType": "com.zijinph.base.auth.autoconfigure.AuthConfigProperties",
+      "name": "zauth.auth-url",
+      "type": "java.lang.String"
+    }
+  ]
+}
