@@ -10,4 +10,6 @@ public @interface DataAuth {
     String dataId();
 
     String dataField() default "";
+
+    String userField() default "";
 }

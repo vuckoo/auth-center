@@ -90,21 +90,26 @@ public class DataAuthInterceptor implements Interceptor {
         String userId = (String) ReflectUtil.reflectByPath(userMethodPath);
         //获取当前登录人数据权限配置
         String dataId = dataCrontrol.dataId();
-        String dataField = "".equals(dataCrontrol.dataField()) ? "role_code" : dataCrontrol.dataField();
         List<DataRule> rules = authClient.getRuleList(userId, dataId);
         if (rules == null || rules.size() == 0) {//未找到权限配置
             log.warn("开启数据权限控制，但未找到具体配置信息！！");
             return sql;
         }
+        String dataField = "".equals(dataCrontrol.dataField()) ? "role_code" : dataCrontrol.dataField();
+        String userField = "".equals(dataCrontrol.userField()) ? "staff_id" : dataCrontrol.userField();
         for (int i = 0; i < rules.size(); i++) {
             DataRule dataRule = rules.get(i);
             String rightCode = dataRule.getRightCode();
             String rightVal = dataRule.getRightValue();
             String ifunion = privSql.length() == 0 ? " " : " or ";
-            if ("2".equals(rightCode) || "4".equals(rightCode)) {//本职位和下属职位数据 或 指定职位和下级
+            if ("1".equals(rightCode)) { // 只本人数据
+                privSql.append(ifunion).append(userField + " = \"" + rightVal + "\" ");
+            } else if ("2".equals(rightCode) || "4".equals(rightCode)) {//本职位和下属职位数据 或 指定职位和下级
                 privSql.append(ifunion).append(dataField + " like \"" + rightVal + "%\" ");
             } else if ("3".equals(rightCode) || "5".equals(rightCode)) {//只本职位数据 或 只指定职位数据
                 privSql.append(ifunion).append(dataField + " = \"" + rightVal + "\" ");
+            } else { // 默认本职位和下属数据
+                privSql.append(ifunion).append(dataField + " like \"" + rightVal + "%\" ");
             }
         }
 
