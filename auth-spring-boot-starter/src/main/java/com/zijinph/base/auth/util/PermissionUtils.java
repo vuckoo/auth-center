@@ -18,7 +18,7 @@ public class PermissionUtils {
         try {
             String id = mappedStatement.getId();
             String className = id.substring(0, id.lastIndexOf("."));
-            String methodName = id.substring(id.lastIndexOf(".") + 1, id.length());
+            String methodName = id.substring(id.lastIndexOf(".") + 1);
             final Class cls = Class.forName(className);
             final Method[] method = cls.getMethods();
             for (Method me : method) {

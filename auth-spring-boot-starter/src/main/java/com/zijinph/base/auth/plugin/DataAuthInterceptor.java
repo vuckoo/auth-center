@@ -82,9 +82,8 @@ public class DataAuthInterceptor implements Interceptor {
         if (dataCrontrol == null || dataCrontrol.dataId() == null) {
             return sql;
         }
-        log.info("原始SQL : {}", sql);
+        log.info("原始SQL :\n {}", sql);
         //开启权限控制
-        StringBuilder privSql = new StringBuilder();
         String userMethodPath = properties.getProperty("client-user-method");
         //获取当前登录人
         String userId = (String) ReflectUtil.reflectByPath(userMethodPath);
@@ -97,6 +96,8 @@ public class DataAuthInterceptor implements Interceptor {
         }
         String dataField = "".equals(dataCrontrol.dataField()) ? "role_code" : dataCrontrol.dataField();
         String userField = "".equals(dataCrontrol.userField()) ? "staff_id" : dataCrontrol.userField();
+
+        StringBuilder privSql = new StringBuilder();
         for (int i = 0; i < rules.size(); i++) {
             DataRule dataRule = rules.get(i);
             String rightCode = dataRule.getRightCode();
@@ -115,7 +116,7 @@ public class DataAuthInterceptor implements Interceptor {
 
         String executeSql = SqlAppender.handlerSql(sql, "(" + privSql + ") and ");
 
-        log.info("加数据权限后SQL: {}", executeSql);
+        log.info("加数据权限后SQL:\n {}", executeSql);
 
         return executeSql;
     }

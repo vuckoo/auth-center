@@ -22,13 +22,17 @@ public class AuthClient {
 
     private Cache<String, List<DataRule>> authCache;
 
+    private String authServer;
+
     public AuthClient(RestTemplate restTemplate, Properties properties) {
         this.restTemplate = restTemplate;
         this.properties = properties;
 
         Properties cacheProperties = new Properties();
         cacheProperties.setProperty("auth.expireAfterWrite", "300000");
-        authCache = CacheFactory.createCache(null, "auth", cacheProperties);
+        this.authCache = CacheFactory.createCache(null, "auth", cacheProperties);
+
+        this.authServer = properties.getProperty("auth-url");
     }
 
     /**
@@ -43,8 +47,7 @@ public class AuthClient {
             String cacheKey = userId+"@@"+dataId;
             List<DataRule> rules = authCache.get(cacheKey);
             if(rules == null){
-                String authUrl = properties.getProperty("auth-url");
-                DataRule[] rulesarr = this.restTemplate.postForObject(authUrl + "/getDataAuth?userId={1}&dataId={2}",
+                DataRule[] rulesarr = this.restTemplate.postForObject(authServer + "/getDataAuth?userId={1}&dataId={2}",
                         null, DataRule[].class, userId, dataId);
                 rules = Arrays.asList(rulesarr);
                 authCache.put(cacheKey, rules);

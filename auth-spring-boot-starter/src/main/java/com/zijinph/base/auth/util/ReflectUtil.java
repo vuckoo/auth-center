@@ -72,7 +72,6 @@ public class ReflectUtil {
         }
     }
 
-
     /**
      * 根据文件路径 获取反射对象并执行对应方法
      */
@@ -81,10 +80,9 @@ public class ReflectUtil {
             //获取类名
             String className = path.substring(0, path.lastIndexOf("."));
             //获取方法名
-            String methodName = path.substring(path.lastIndexOf(".") + 1, path.length());
+            String methodName = path.substring(path.lastIndexOf(".") + 1);
             // 获取字节码文件对象
             Class c = Class.forName(className);
-
             Constructor con = c.getConstructor();
             Object obj = con.newInstance();
 
